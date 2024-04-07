@@ -10,10 +10,18 @@ phone VARCHAR(10) NOT NULL UNIQUE,
 adress VARCHAR(100)
 );
 
+CREATE TABLE acthor(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+egn VARCHAR(10) NOT NULL,
+phone VARCHAR(10) NOT NULL
+);
+
 CREATE TABLE flimsAndSerials(
 id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(100) NOT NULL UNIQUE,
-nameActor VARCHAR(100) NOT NULL
+id_acthor INT NOT NULL,
+FOREIGN KEY(id_acthor) REFERENCES acthor(id)
 );
 
 CREATE TABLE television(
@@ -86,9 +94,11 @@ VALUES ('Иван Стойков','0441076754','0895642143','София Млад
 ('Емилия Владиславова','9923746582','0895876534','Варна'),
 ('Сашо Петров','0132746536','0895680023','Елин Пелин');
 
+INSERT INTO acthor(name,egn,phone)
+VALUES('Том Холанд','8765346538','0895663423'),('Вин Дизел','9988773354','0987653452'),('Треванте Родс','7765348765','0989675434'),('Шарлот Вега','8998899876','0877449930');
 
-INSERT INTO flimsAndSerials(name,nameActor)
-VALUES('Spider-Man','Том Холанд'),('Fast and Furious','Вин Дизел'),('The Bird box','Треванте Родс'),('Wrong turn','Шарлот Вега');
+INSERT INTO flimsAndSerials(name,id_acthor)
+VALUES('Spider-Man',1),('Fast and Furious',2),('The Bird box',3),('Wrong turn',4);
 
 INSERT INTO television(name)
 VALUES('BTV'),('Nova'),('Kino Nova'),('BTV Cinema');
@@ -111,5 +121,7 @@ VALUES(3,1),(2,2),(4,1),(4,3);
 
 INSERT INTO televisionUser(id_television,id_user)
 VALUES(1,1),(1,2),(2,3),(2,4);
+
+
 
 
