@@ -40,7 +40,7 @@ image VARCHAR(100)
 
 CREATE TABLE raitingTransmission(
 id INT AUTO_INCREMENT PRIMARY KEY,
-score INT NOT NULL,
+score INT,
 date DATETIME NOT NULL,
 id_transmission INT NOT NULL,
 id_user INT NOT NULL,
@@ -51,7 +51,7 @@ FOREIGN KEY (id_user) REFERENCES user(id)
 
 CREATE TABLE rairingFilms(
 id INT AUTO_INCREMENT PRIMARY KEY,
-score INT NOT NULL,
+score INT,
 date DATETIME NOT NULL,
 id_flimsAndSerials INT NOT NULL,
 id_user INT NOT NULL,
@@ -110,8 +110,9 @@ VALUES('На Кафе','Гала','','data:image/jpeg;base64,/mL7R4q6CpyeIEfCSdR
 INSERT INTO raitingTransmission(score,date,id_transmission,id_user)
 VALUES(98,'2024-03-02 12:30:00',2,1),(67,'2024-09-18 11:00:00',1,2),(60,'2023-09-08 23:00:00',2,1),(87,'2024-02-03 17:30:00',2,3);
 
+
 INSERT INTO rairingFilms(score,date,id_flimsAndSerials,id_user)
-VALUES(77,'2024-07-23 13:23:45',1,1),(99,'2024-08-08 11:00:00',2,2),(80,'2024-11-12 12:00:00',1,3),(100,'2024-12-27 23:00:00',3,3),(70,'2024-08-25 22:00:00',1,4),(99,'2024-09-19 15:56:00',4,4);
+VALUES(77,'2024-07-23 13:23:45',1,1),(99,'2024-08-08 11:00:00',2,2),(80,'2024-11-12 12:00:00',1,3),(100,'2024-12-27 23:00:00',3,3),(70,'2024-08-25 22:00:00',1,4),(99,'2024-09-19 15:56:00',4,4),(NULL,'2024-07-23 13:56:00',1,4);
 
 INSERT INTO televisionTransmission(id_television,id_transmission)
 VALUES(1,1),(2,1),(2,1),(2,2);
@@ -122,6 +123,44 @@ VALUES(3,1),(2,2),(4,1),(4,3);
 INSERT INTO televisionUser(id_television,id_user)
 VALUES(1,1),(1,2),(2,3),(2,4);
 
+
+-- requests
+-- request 1
+SELECT * FROM user
+WHERE adress='Варна';
+
+
+-- request 2
+SELECT AVG(score) FROM rairingFilms
+GROUP BY id
+HAVING id=1;
+
+-- request 3
+SELECT acthor.name AS acthorName, flimsAndSerials.name AS filmsName
+FROM acthor JOIN flimsAndSerials
+ON acthor.id=flimsAndSerials.id_acthor;
+
+-- request4
+-- ИЗВЕЖДАМЕ ИМЕНАТА НА ФИЛМИТЕ ДОРИ И ДА НЯМАТ РЕЗУЛТАТИ
+SELECT flimsAndSerials.name,rairingFilms.score
+FROM flimsAndSerials JOIN rairingFilms
+ON flimsAndSerials.id=rairingFilms.id_flimsAndSerials;
+
+
+-- REQUEST 5
+-- ИЗВЕЖДАМЕ ИМЕТО НА USER-А И ИМЕТО НА ПРЕДАВАНЕТО КОЕТО Е РЕЙТНАЛ
+SELECT user.name AS userName, transmission.name AS transmissionName
+FROM user JOIN transmission
+ON user.id IN(
+SELECT raitingTransmission.id_user FROM raitingTransmission
+WHERE raitingTransmission.id_transmission=transmission.id);
+
+-- REQUEST 6
+-- извеждаме името на потребителя и общия брой на предаванията , които е рейтнал
+SELECT user.name, COUNT(raitingTransmission.id)
+FROM user JOIN raitingTransmission
+ON user.id=raitingTransmission.id_user
+GROUP BY raitingTransmission.id;
 
 
 
