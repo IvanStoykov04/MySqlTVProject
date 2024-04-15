@@ -19,9 +19,15 @@ phone VARCHAR(10) NOT NULL
 
 CREATE TABLE flimsAndSerials(
 id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100) NOT NULL UNIQUE,
-id_acthor INT NOT NULL,
-FOREIGN KEY(id_acthor) REFERENCES acthor(id)
+name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE actorInFilms(
+id INT AUTO_INCREMENT PRIMARY KEY,
+id_actor INT NOT NULL,
+id_filmsAndSerials INT NOT NULL,
+FOREIGN KEY(id_actor) REFERENCES acthor(id),
+FOREIGN KEY(id_filmsAndSerials) REFERENCES flimsAndSerials(id)
 );
 
 CREATE TABLE television(
@@ -97,8 +103,11 @@ VALUES ('Иван Стойков','0441076754','0895642143','София Млад
 INSERT INTO acthor(name,egn,phone)
 VALUES('Том Холанд','8765346538','0895663423'),('Вин Дизел','9988773354','0987653452'),('Треванте Родс','7765348765','0989675434'),('Шарлот Вега','8998899876','0877449930');
 
-INSERT INTO flimsAndSerials(name,id_acthor)
-VALUES('Spider-Man',1),('Fast and Furious',2),('The Bird box',3),('Wrong turn',4);
+INSERT INTO flimsAndSerials(name)
+VALUES('Spider-Man'),('Fast and Furious'),('The Bird box'),('Wrong turn');
+
+INSERT INTO actorInFilms(id_actor,id_filmsAndSerials)
+VALUES(1,1),(2,2),(3,1);
 
 INSERT INTO television(name)
 VALUES('BTV'),('Nova'),('Kino Nova'),('BTV Cinema');
@@ -126,19 +135,25 @@ VALUES(1,1),(1,2),(2,3),(2,4);
 
 -- requests
 -- request 1
+-- Извеждаме всички потребители с адрес варна
 SELECT * FROM user
 WHERE adress='Варна';
 
 
 -- request 2
+-- извеждаме средния резултат от оценките на потребителите на даден филм
 SELECT AVG(score) FROM rairingFilms
 GROUP BY id
 HAVING id=1;
 
 -- request 3
+-- извеждаме actors  филмите в които участват
 SELECT acthor.name AS acthorName, flimsAndSerials.name AS filmsName
 FROM acthor JOIN flimsAndSerials
-ON acthor.id=flimsAndSerials.id_acthor;
+ON acthor.id IN(
+SELECT id_actor FROM actorInFilms
+WHERE actorInFilms.id_filmsAndSerials=flimsAndSerials.id
+);
 
 -- request4
 -- ИЗВЕЖДАМЕ ИМЕНАТА НА ФИЛМИТЕ ДОРИ И ДА НЯМАТ РЕЗУЛТАТИ
