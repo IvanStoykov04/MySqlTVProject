@@ -168,11 +168,11 @@ HAVING id=1;
 -- request 3
 -- извеждаме actors  филмите в които участват
 SELECT acthor.name AS acthorName, flimsAndSerials.name AS filmsName
-FROM acthor JOIN flimsAndSerials
-ON acthor.id IN(
-SELECT id_actor FROM actorInFilms
-WHERE actorInFilms.id_filmsAndSerials=flimsAndSerials.id
-);
+FROM acthor JOIN actorInFilms
+ON acthor.id=actorInFilms.id_actor
+JOIN flimsAndSerials
+ON actorInFilms.id_filmsAndSerials=flimsAndSerials.id;
+
 
 -- request4
 -- ИЗВЕЖДАМЕ ИМЕНАТА НА ФИЛМИТЕ ДОРИ И ДА НЯМАТ РЕЗУЛТАТИ
