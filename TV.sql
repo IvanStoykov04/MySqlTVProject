@@ -198,4 +198,54 @@ GROUP BY raitingTransmission.id_user;
 
 
 -- request 7(triger)
+-- създаваме 
+DROP TABLE IF EXISTS transmission_log;
+CREATE TABLE transmission_log(
+id INT AUTO_INCREMENT PRIMARY KEY,
+operation ENUM('INSERT','UPDATE','DELETE') NOT NULL,
+old_name VARCHAR(100),
+nаw_name VARCHAR(100),
+old_description VARCHAR(100),
+new_description VARCHAR(100),
+old_image VARCHAR(100),
+new_image VARCHAR(100),
+dateOfLog DATETIME
+)ENGINE = Innodb;
+
+-- CREATE TRIGER
+delimiter |
+CREATE TRIGGER after_transmission_update AFTER UPDATE ON transmission
+FOR EACH ROW
+BEGIN
+INSERT INTO transmission_log(operation,
+old_name,
+naw_name,
+old_description,
+new_description,
+old_image,
+new_image,
+dateOfLog)
+VALUES ('UPDATE',OLD.name,NEW.name,OLD.description,NEW.description,
+OLD.image,NEW.image,NOW());
+END;
+|
+Delimiter ;
+
+
+UPDATE transmission
+SET description='На кафе'
+WHERE id =1;
+
+
+-- REQUEST 8
+-- курсор
+
+
+
+
+
+
+
+
+
 
