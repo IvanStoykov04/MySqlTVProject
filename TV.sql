@@ -10,6 +10,12 @@ phone VARCHAR(10) NOT NULL UNIQUE,
 adress VARCHAR(100)
 );
 
+CREATE TABLE leadTV(
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+egn VARCHAR(10) NOT NULL
+);
+
 CREATE TABLE acthor(
 id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(100) NOT NULL,
@@ -38,11 +44,18 @@ name VARCHAR(100) NOT NULL
 CREATE TABLE transmission(
 id INT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(100) NOT NULL,
-nameTvHost VARCHAR(100) NOT NULL,
 description VARCHAR(100),
 image VARCHAR(100)
 );
 
+
+CREATE TABLE leadTransmision(
+id INT AUTO_INCREMENT PRIMARY KEY,
+id_leadTV INT NOT NULL,
+id_transmision INT NOT NULL,
+FOREIGN KEY (id_leadTV) REFERENCES leadTV(id),
+FOREIGN KEY (id_transmision) REFERENCES transmission(id)
+);
 
 CREATE TABLE raitingTransmission(
 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -112,9 +125,15 @@ VALUES(1,1),(2,2),(3,1);
 INSERT INTO television(name)
 VALUES('BTV'),('Nova'),('Kino Nova'),('BTV Cinema');
 
-INSERT INTO transmission(name,nameTvHost,description,image)
-VALUES('На Кафе','Гала','','data:image/jpeg;base64,/mL7R4q6CpyeIEfCSdR/eY'),
-('Времето','Натали Трифонова','информира ни за предстоящата метеорологична обстановка','data:image/jpeg;base64,/nbuwrvSdR/eY');
+INSERT INTO leadTV(name,egn)
+VALUES('Гала','8878657435'),('Натали Трифонова','8909876534');
+
+INSERT INTO transmission(name,description,image)
+VALUES('На Кафе','','data:image/jpeg;base64,/mL7R4q6CpyeIEfCSdR/eY'),
+('Времето','информира ни за предстоящата метеорологична обстановка','data:image/jpeg;base64,/nbuwrvSdR/eY');
+
+INSERT INTO leadTransmision(id_leadTV,id_transmision)
+VALUES(1,1),(2,2);
 
 INSERT INTO raitingTransmission(score,date,id_transmission,id_user)
 VALUES(98,'2024-03-02 12:30:00',2,1),(67,'2024-09-18 11:00:00',1,2),(60,'2023-09-08 23:00:00',2,1),(87,'2024-02-03 17:30:00',2,3);
@@ -172,10 +191,11 @@ WHERE raitingTransmission.id_transmission=transmission.id);
 
 -- REQUEST 6
 -- извеждаме името на потребителя и общия брой на предаванията , които е рейтнал
-SELECT user.name, COUNT(raitingTransmission.id)
+SELECT user.name, COUNT(raitingTransmission.id_user)
 FROM user JOIN raitingTransmission
 ON user.id=raitingTransmission.id_user
-GROUP BY raitingTransmission.id;
+GROUP BY raitingTransmission.id_user;
 
 
+-- request 7(triger)
 
