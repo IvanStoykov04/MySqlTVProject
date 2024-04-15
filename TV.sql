@@ -272,7 +272,7 @@ DELIMITER |
 
 CALL transmissionTest();
 
-
+-- the project is finished
 
 
 
