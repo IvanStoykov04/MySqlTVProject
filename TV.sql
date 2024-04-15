@@ -238,12 +238,39 @@ WHERE id =1;
 
 
 -- REQUEST 8
--- курсор
+-- процедура с курсор
 
+DROP PROCEDURE IF EXISTS transmissionTest;
+DELIMITER |
+CREATE PROCEDURE transmissionTest()
+BEGIN
+DECLARE finished int;
+DECLARE tempName varchar(100);
+DECLARE tempImage varchar(100);
+DECLARE transmissionCursor CURSOR FOR
+SELECT name, image
+FROM transmission
+WHERE description IS NOT NULL;
+DECLARE continue handler FOR NOT FOUND set finished = 1;
+set finished = 0;
+OPEN transmissionCursor;
+transmission_loop: WHILE( finished = 0)
+DO
+FETCH transmissionCursor INTO tempName,tempImage;
+IF(finished = 1)
+THEN
+LEAVE transmission_loop;
+END IF;
+SELECT tempName,tempImage; # or do something with thesevariables...
+END WHILE;
+CLOSE transmissionCursor;
+SET finished = 0;
+SELECT 'Finished!';
+END;
+|
+DELIMITER |
 
-
-
-
+CALL transmissionTest();
 
 
 
