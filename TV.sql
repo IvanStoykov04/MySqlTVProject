@@ -281,6 +281,48 @@ DELIMITER |
 CALL transmissionTest();
 
 -- the project is finished
+-- -----------------------------------------------------------
+-- Create procedure
+-- Procedure exercises
+
+DELIMITER |
+CREATE PROCEDURE getAllActor()
+BEGIN
+SELECT * FROM acthor;
+END
+|
+DELIMITER ;
+
+CALL getAllActor();
 
 
 
+-- second procedure
+
+DELIMITER |
+CREATE PROCEDURE getAllLeadTVByName()
+BEGIN
+SET @name_lead='Гала';
+SELECT * FROM leadtv 
+WHERE name=@name_lead;
+END
+| DELIMITER ;
+
+CALL getAllLeadTVByName();
+
+-- Third procedure
+DELIMITER |
+CREATE PROCEDURE getAllTelevisionByVariable(IN var VARCHAR(100))
+BEGIN
+SET @nameTelevision=var;
+SELECT * FROM television
+WHERE name=@nameTelevision;
+END
+|
+DELIMITER ;
+SET @name='Nova';
+CALL getAllTelevisionByVariable(@name);
+
+
+
+-- fourth procedure
