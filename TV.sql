@@ -326,3 +326,34 @@ CALL getAllTelevisionByVariable(@name);
 
 
 -- fourth procedure
+DELIMITER |
+CREATE PROCEDURE changeVariable(OUT var VARCHAR(100))
+BEGIN
+SET var='Ivan Stoikov';
+END
+|
+DELIMITER ;
+SET @name='Peter';
+CALL changeVariable(@name);
+SELECT @name;
+
+
+-- fifth procedrure
+DROP PROCEDURE getFimAndActhor;
+DELIMITER |
+CREATE PROCEDURE getFimAndActhor(IN nameActhor VARCHAR(100),nameFilm VARCHAR(100))
+BEGIN
+SET @nameOfActhor=nameActhor;
+SET @nameOfFilm=nameFilm;
+SELECT acthor.name, flimsAndSerials.name
+FROM acthor JOIN actorinfilms
+ON acthor.id=actorinfilms.id_actor
+JOIN flimsAndSerials
+ON flimsAndSerials.id=actorinfilms.id_filmsAndSerials
+WHERE acthor.name=@nameOfActhor AND flimsAndSerials.name=@nameOfFilm;
+END
+|
+DELIMITER ;
+SET @acName='Вин Дизел';
+SET @filName='Fast and Furious';
+CALL getFimAndActhor(@acName,@filName);
